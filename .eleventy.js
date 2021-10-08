@@ -7,6 +7,44 @@ const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
 module.exports = function(eleventyConfig) {
+
+
+  eleventyConfig.addWatchTarget("test.scss");
+
+
+  eleventyConfig.addPlugin(require("eleventy-load"), {
+    rules: [
+      {
+        test: /\.(md|html)$/,
+        loaders: [
+          {
+            loader: require("eleventy-load-html"),
+          },
+        ],
+      },
+      {
+        test: /\.scss$/,
+        loaders: [
+          {
+            loader: require("eleventy-load-sass"),
+            options: {
+              indentedSyntax: true, // True for Sass, false for SCSS
+            },
+          },
+          {
+            loader: require("eleventy-load-css"),
+          },
+          {
+            loader: require("eleventy-load-file"),
+            options: {
+              name: "[hash].css",
+            },
+          },
+        ],
+      },
+    ],
+  });
+  
   // Add plugins
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
@@ -105,7 +143,8 @@ module.exports = function(eleventyConfig) {
       "md",
       "njk",
       "html",
-      "liquid"
+      "liquid",
+      "scss"
     ],
 
     // -----------------------------------------------------------------
